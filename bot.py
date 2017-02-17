@@ -8,7 +8,7 @@ import verbix.sv
 
 
 config = configparser.ConfigParser()
-config.read('project.ini')
+config.read(os.path.join(os.path.dirname(__file__), 'project.ini'))
 
 bot = telepot.Bot(config.get('bot', 'token'))
 
