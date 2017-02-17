@@ -1,0 +1,9 @@
+[Unit]
+After=network-online.target
+
+[Service]
+User=alarm
+ExecStart=/home/alarm/projects/verbix/bot.py
+
+[Install]
+WantedBy=multi-user.target
