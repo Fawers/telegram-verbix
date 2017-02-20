@@ -26,10 +26,10 @@ def _get_verb_info(verb):
     try:
         verb_info = verbix.sv.get_verb_info(verb)
     except:
-        return '_Verbet "%s" hittades inte._' % verb
+        return 'Verbet `%s` hittades inte.' % verb
 
     if verb_info is None:
-        return '_Verbet "%s" hittades inte._' % verb
+        return 'Verbet `%s` hittades inte.' % verb
 
     def format(tuple):
         v, f = tuple
