@@ -53,10 +53,13 @@ def _get_verb_info(verb):
 
 def handle_message(msg):
     verb = msg['text']
+    chat_id = msg['chat']['id']
+
+    bot.sendChatAction(chat_id, 'typing')
 
     info = _get_verb_info(verb)
 
-    bot.sendMessage(msg['chat']['id'], info, parse_mode='markdown',
+    bot.sendMessage(chat_id, info, parse_mode='markdown',
                     disable_web_page_preview=True)
 
 
