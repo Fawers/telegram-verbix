@@ -26,7 +26,7 @@ def get_url(verbet):
     return URL.format(verbet=verbet)
 
 
-def build_info(infinitive, supine, gerund, present, past):
+def build_info(infinitive, supine, gerund, present, past, url):
     return {
         'forms': {
             'infinitive': (infinitive.text, infinitive.get('class')[0]),
@@ -36,7 +36,8 @@ def build_info(infinitive, supine, gerund, present, past):
         'tenses': {
             'present': (present.text, present.get('class')[0]),
             'past': (past.text, past.get('class')[0])
-        }
+        },
+        'url': url
     }
 
 
@@ -67,4 +68,4 @@ def get_verb_info(verbet):
     present = present.select('span')[1]
     past = past.select('span')[1]
 
-    return build_info(infinitive, supine, gerund, present, past)
+    return build_info(infinitive, supine, gerund, present, past, url)

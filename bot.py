@@ -13,7 +13,7 @@ config.read(os.path.join(os.path.dirname(__file__), 'project.ini'))
 bot = telepot.Bot(config.get('bot', 'token'))
 
 MESSAGE_TEMPLATE = """\
-Infinitive: %s
+Infinitive: [%s](%%s)
 Supine: %s
 Gerund: %s
 
@@ -46,7 +46,9 @@ def _get_verb_info(verb):
     present = format(verb_info['tenses']['present'])
     past = format(verb_info['tenses']['past'])
 
-    return MESSAGE_TEMPLATE % (infinitive, supine, gerund, present, past)
+    url = verb_info['url']
+
+    return MESSAGE_TEMPLATE % (infinitive, supine, gerund, present, past) % url
 
 
 def handle_message(msg):
@@ -54,7 +56,8 @@ def handle_message(msg):
 
     info = _get_verb_info(verb)
 
-    bot.sendMessage(msg['chat']['id'], info, parse_mode='markdown')
+    bot.sendMessage(msg['chat']['id'], info, parse_mode='markdown',
+                    disable_web_page_preview=True)
 
 
 def handle_inline(query):
