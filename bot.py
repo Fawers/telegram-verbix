@@ -1,9 +1,9 @@
 import os
-import threading
 import configparser
 
 import telepot
 
+import misc
 import verbix.sv
 
 
@@ -51,6 +51,7 @@ def _get_verb_info(verb):
     return MESSAGE_TEMPLATE % (infinitive, supine, gerund, present, past) % url
 
 
+@misc.threaded
 def handle_message(msg):
     verb = msg['text']
     chat_id = msg['chat']['id']
