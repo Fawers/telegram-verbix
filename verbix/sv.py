@@ -26,12 +26,13 @@ def get_url(verbet):
     return URL.format(verbet=verbet)
 
 
-def build_info(infinitive, supine, gerund, present, past, url):
+def build_info(infinitive, supine, gerund, imperative, present, past, url):
     return {
         'forms': {
             'infinitive': (infinitive.text, infinitive.get('class')[0]),
             'supine': (supine.text, supine.get('class')[0]),
-            'gerund': (gerund.text, gerund.get('class')[0])
+            'gerund': (gerund.text, gerund.get('class')[0]),
+            'imperative': (imperative.text, imperative.get('class')[0])
         },
         'tenses': {
             'present': (present.text, present.get('class')[0]),
@@ -56,9 +57,11 @@ def get_verb_info(verbet):
 
     verbtable = soup.select_one(SELECT_VERBTABLE)
 
-    forms = verbtable.select_one(SELECT_FORMS)
+    forms = verbtable.select(SELECT_FORMS)
 
-    infinitive, supine, gerund = forms.select('span')
+    infinitive, supine, gerund = forms[0].select('span')
+
+    imperative = forms[-2].select('span')[2]
 
     #
 
@@ -68,4 +71,4 @@ def get_verb_info(verbet):
     present = present.select('span')[1]
     past = past.select('span')[1]
 
-    return build_info(infinitive, supine, gerund, present, past, url)
+    return build_info(infinitive, supine, gerund, imperative, present, past, url)
