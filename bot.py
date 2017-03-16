@@ -4,7 +4,7 @@ import configparser
 import telepot
 
 import misc
-import verbix.sv
+import verbix
 
 
 config = configparser.ConfigParser()
@@ -16,6 +16,7 @@ MESSAGE_TEMPLATE = """\
 Infinitive: [%s](%%s)
 Supine: %s
 Gerund: %s
+Imperative: %s
 
 Present: %s
 Past: %s
@@ -43,12 +44,13 @@ def _get_verb_info(verb):
     infinitive = format(verb_info['forms']['infinitive'])
     supine = format(verb_info['forms']['supine'])
     gerund = format(verb_info['forms']['gerund'])
+    imperative = format(verb_info['forms']['imperative'])
     present = format(verb_info['tenses']['present'])
     past = format(verb_info['tenses']['past'])
 
     url = verb_info['url']
 
-    return MESSAGE_TEMPLATE % (infinitive, supine, gerund, present, past) % url
+    return MESSAGE_TEMPLATE % (infinitive, supine, gerund, imperative, present, past) % url
 
 
 @misc.threaded
