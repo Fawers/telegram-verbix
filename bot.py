@@ -86,8 +86,6 @@ def handle_inline(query):
         }
     }])
 
-    #threading.Thread(target=handle_chosen_inline, args=(unique_id, verb)).start()
-
 
 def handle_chosen_inline(result):
     print(result)
@@ -100,8 +98,4 @@ def handle_chosen_inline(result):
 
 if __name__ == '__main__':
     bot.message_loop(
-        {
-            'chat': handle_message,
-            'inline_query': handle_inline,
-            'chosen_inline_result': handle_chosen_inline
-        }, relax=0.5, run_forever='Listening...')
+        handle_message, relax=0.5, run_forever='Listening...')
