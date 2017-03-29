@@ -98,4 +98,4 @@ def handle_chosen_inline(result):
 
 if __name__ == '__main__':
     bot.message_loop(
-        handle_message, relax=0.5, run_forever='Listening...')
+        handle_message, relax=0.5, timeout=5, run_forever='Listening...')
