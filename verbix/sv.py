@@ -2,10 +2,6 @@ import bs4
 import requests
 
 
-SPECIAL_CHARACTERS = {
-    'å': 'aO'
-}
-
 URL = 'http://www.verbix.com/webverbix/Swedish/{verbet}.html'
 
 RED_FLAG_TEXT = 'The verb does not exist or it is unknown for Verbix.'
@@ -19,9 +15,6 @@ SELECT_TENSES = '.pure-u-1-2'
 
 def get_url(verbet):
     verbet = verbet.lower()
-
-    for k, v in SPECIAL_CHARACTERS.items():
-        verbet = verbet.replace(k, v)
 
     return URL.format(verbet=verbet)
 
