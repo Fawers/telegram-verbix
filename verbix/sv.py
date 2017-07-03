@@ -8,7 +8,7 @@ SPECIAL_CHARACTERS = {
 
 URL = 'http://www.verbix.com/webverbix/Swedish/{verbet}.html'
 
-RED_FLAG_TEXT = 'The verb you entered does not exist in Verbix verb database.'
+RED_FLAG_TEXT = 'The verb does not exist or it is unknown for Verbix.'
 
 SELECT_VERBTABLE = '.verbtable'
 
