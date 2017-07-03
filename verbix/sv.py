@@ -54,7 +54,7 @@ def get_verb_info(verbet):
 
     infinitive, supine, gerund = forms[0].select('span')
 
-    imperative = forms[-2].select('span')[2]
+    imperative = forms[-1].select('span')[1]
 
     #
 
