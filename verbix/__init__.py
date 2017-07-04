@@ -1,1 +1,2 @@
-from . import sv
+from .base import Verbix, VerbixError, VerbNotFoundError
+from .sv import swedish

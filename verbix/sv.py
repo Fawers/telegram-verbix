@@ -1,67 +1,60 @@
-import bs4
-import requests
+from verbix.base import Verbix, VerbixError, VerbNotFoundError
 
 
-URL = 'http://www.verbix.com/webverbix/Swedish/{verbet}.html'
+class Swedish(Verbix):
+    SELECT_TENSES = '.pure-u-1-2'
 
-RED_FLAG_TEXT = 'The verb does not exist or it is unknown for Verbix.'
+    def __init__(self):
+        super().__init__('Swedish')
 
-SELECT_VERBTABLE = '.verbtable'
+    def conjugate(self, verb):
+        try:
+            soup = self.query_verb(verb)
+        except VerbNotFoundError:
+            return f'Could not find verb "{verb}" in the database. :('
+        except VerbixError:
+            return 'An error occurred while accessing Verbix. Please try again.'
 
-SELECT_FORMS = '.pure-u-1-1'
+        verbtable = soup.select_one(self.SELECT_VERBTABLE)
 
-SELECT_TENSES = '.pure-u-1-2'
+        forms = verbtable.select(self.SELECT_FORMS)
+
+        infinitive, supine, gerund = forms[0].select('span')
+
+        imperative = forms[-1].select('span')[1]
+
+        tenses = verbtable.select(self.SELECT_TENSES)
+
+        present, past = tenses[0], tenses[2]
+        present = present.select('span')[1]
+        past = past.select('span')[1]
+
+        return self._build_info(
+            infinitive, supine, gerund, imperative, present, past,
+            self.get_url(verb))
+
+    def _build_info(self, **data):
+        infinitive = data.pop('infinitive')
+        supine = data.pop('supine')
+        gerund = data.pop('gerund')
+        imperative = data.pop('imperative')
+        present = data.pop('present')
+        past = data.pop('past')
+        url = data.pop('url')
+
+        return {
+            'forms': {
+                'infinitive': (infinitive.text, infinitive.get('class')[0]),
+                'supine': (supine.text, supine.get('class')[0]),
+                'gerund': (gerund.text, gerund.get('class')[0]),
+                'imperative': (imperative.text, imperative.get('class')[0])
+            },
+            'tenses': {
+                'present': (present.text, present.get('class')[0]),
+                'past': (past.text, past.get('class')[0])
+            },
+            'url': url
+        }
 
 
-def get_url(verbet):
-    verbet = verbet.lower()
-
-    return URL.format(verbet=verbet)
-
-
-def build_info(infinitive, supine, gerund, imperative, present, past, url):
-    return {
-        'forms': {
-            'infinitive': (infinitive.text, infinitive.get('class')[0]),
-            'supine': (supine.text, supine.get('class')[0]),
-            'gerund': (gerund.text, gerund.get('class')[0]),
-            'imperative': (imperative.text, imperative.get('class')[0])
-        },
-        'tenses': {
-            'present': (present.text, present.get('class')[0]),
-            'past': (past.text, past.get('class')[0])
-        },
-        'url': url
-    }
-
-
-def get_verb_info(verbet):
-    url = get_url(verbet)
-
-    response = requests.get(url)
-
-    if response.status_code != 200:
-        return
-
-    if response.text.find(RED_FLAG_TEXT) != -1:
-        return
-
-    soup = bs4.BeautifulSoup(response.text, 'html.parser')
-
-    verbtable = soup.select_one(SELECT_VERBTABLE)
-
-    forms = verbtable.select(SELECT_FORMS)
-
-    infinitive, supine, gerund = forms[0].select('span')
-
-    imperative = forms[-1].select('span')[1]
-
-    #
-
-    tenses = verbtable.select(SELECT_TENSES)
-
-    present, past = tenses[0], tenses[2]
-    present = present.select('span')[1]
-    past = past.select('span')[1]
-
-    return build_info(infinitive, supine, gerund, imperative, present, past, url)
+swedish = Swedish()
