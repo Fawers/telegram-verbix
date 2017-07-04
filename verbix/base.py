@@ -22,6 +22,9 @@ class Verbix:
     # Forms div class
     SELECT_FORMS = '.pure-u-1-1'
 
+    # Tenses div class
+    SELECT_TENSES = '.pure-u-1-2'
+
     def __init__(self, language):
         self.language = language
 

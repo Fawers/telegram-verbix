@@ -2,8 +2,6 @@ from verbix.base import Verbix, VerbixError, VerbNotFoundError
 
 
 class Swedish(Verbix):
-    SELECT_TENSES = '.pure-u-1-2'
-
     def __init__(self):
         super().__init__('Swedish')
 
@@ -30,8 +28,9 @@ class Swedish(Verbix):
         past = past.select('span')[1]
 
         return self._build_info(
-            infinitive, supine, gerund, imperative, present, past,
-            self.get_url(verb))
+            infinitive=infinitive, supine=supine, gerund=gerund,
+            imperative=imperative, present=present, past=past,
+            url=self.get_url(verb))
 
     def _build_info(self, **data):
         infinitive = data.pop('infinitive')
