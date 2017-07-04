@@ -32,7 +32,7 @@ class Verbix:
         return self.URL.format(language=self.language,
                                verb=verb.lower())
 
-    def query_verb(self, verb):
+    def query_verb(self, verb, response_content_handler=None):
         """
         Query verbix for the given verb. Returns a BeautifulSoup
         instance.
@@ -41,13 +41,17 @@ class Verbix:
 
         response = requests.get(url)
 
+        if response_content_handler is None:
+            response_content_handler = lambda r: r.text
+
         if response.status_code != 200:
             raise VerbixError(response.text)
 
         if response.text.find(self.RED_FLAG_TEXT) != -1:
             raise VerbNotFoundError(verb)
 
-        return bs4.BeautifulSoup(response.text, 'html.parser')
+        return bs4.BeautifulSoup(response_content_handler(response),
+                                 'html.parser')
 
     def conjugate(self, verb):
         # implement this in subclasses
