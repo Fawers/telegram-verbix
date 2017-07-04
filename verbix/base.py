@@ -3,8 +3,8 @@ import requests
 
 
 # Exceptions
-VerbixError = type('VerbixError', (Exception,))
-VerbNotFoundError = type('VerbNotFoundError', (Exception,))
+VerbixError = type('VerbixError', (Exception,), {})
+VerbNotFoundError = type('VerbNotFoundError', (Exception,), {})
 
 
 class Verbix:
@@ -16,15 +16,18 @@ class Verbix:
     # database
     RED_FLAG_TEXT = 'The verb does not exist or it is unknown for Verbix.'
 
-    # Base html div
+    # Base css class
     SELECT_VERBTABLE = '.verbtable'
+
+    # Forms div class
+    SELECT_FORMS = '.pure-u-1-1'
 
     def __init__(self, language):
         self.language = language
 
     def get_url(self, verb):
         return self.URL.format(language=self.language,
-                               verb=verb)
+                               verb=verb.lower())
 
     def query_verb(self, verb):
         """
@@ -45,4 +48,10 @@ class Verbix:
 
     def conjugate(self, verb):
         # implement this in subclasses
+        raise NotImplementedError
+
+    def _build_info(self):
+        # implement this in subclasses; make it return a dictionary
+        # containing information about the verb's conjugations,
+        # inflections, etc
         raise NotImplementedError
