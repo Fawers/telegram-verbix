@@ -56,7 +56,7 @@ class Japanese(Verbix):
                     for politeness in (row.select_one('.pronoun').text,)
                     for word in (row.select_one('.normal').text,))
 
-
         return (verb_class, kanji, kana)
+
 
 japanese = Japanese()
