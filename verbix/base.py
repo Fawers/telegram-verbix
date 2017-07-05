@@ -1,3 +1,5 @@
+from urllib.parse import quote as urlquote
+
 import bs4
 import requests
 
@@ -58,3 +60,6 @@ class Verbix:
         # containing information about the verb's conjugations,
         # inflections, etc
         raise NotImplementedError
+
+    def _verb_safe_url(self, verb):
+        return urlquote(self.get_url(verb), safe=':/')
