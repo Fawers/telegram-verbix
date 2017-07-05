@@ -1,3 +1,5 @@
+from urllib.parse import quote as urlquote
+
 from verbix.base import Verbix, VerbixError, VerbNotFoundError
 
 
@@ -11,7 +13,10 @@ class Japanese(Verbix):
         try:
             soup = self.query_verb(verb)
         except VerbNotFoundError:
-            return f'Could not find verb "{verb}" in the database. :('
+            return (
+                f'Could not find verb "{verb}" in the database.\n'
+                'Remember to search only with kana or rōmaji (not kanji!).'
+            )
         except VerbixError:
             return 'An error occurred while accessing Verbix. Please try again.'
 
@@ -32,28 +37,51 @@ class Japanese(Verbix):
 
         for i in range(2, 19):
             t = tables[i]
-            form = t.select_one('h2').text
+            form = {'name': t.select_one('h2').text}
 
             if self.HALF_COLUMN in t['class']:
                 # there is only kana to retrieve here
-                kana.append(
-                    (form, t.select(
-                        self.TENSE_HALF_WIDTH)[1].select_one('span').text))
+                form['kana'] = t.select(self.TENSE_HALF_WIDTH)[1] \
+                                .select_one('span').text
+                kana.append(form)
 
             else:
-                # there is kana and plain/polite to retrieve here, both
+                # there is kana and politeness to retrieve here, both
                 # affirmative and negative
                 affirmative_negative = t.select(self.TENSE_FULL_WIDTH)[2:4]
 
-                # WARNING: Extreme LOL-zone below - proceed at your own risk
-                kana.extend(
-                    (form, a_n.select_one('h3').text, politeness, word)
-                    for a_n in affirmative_negative
-                    for row in a_n.select('tr')
-                    for politeness in (row.select_one('.pronoun').text,)
-                    for word in (row.select_one('.normal').text,))
+                for situation in affirmative_negative:
+                    # Literally just "Affirmative" or "Negative" here
+                    situation_str = situation.select_one('h3').text
+                    form[situation_str] = []
 
-        return (verb_class, kanji, kana)
+                    for row in situation.select('tr'):
+                        # Either 'plain' or 'polite'
+                        formality = row.select_one('.pronoun').text
+                        # The actual inflectioned word
+                        word = row.select_one('.normal').text
+
+                        form[situation_str].append({
+                            'formality': formality,
+                            'kana': word})
+
+                kana.append(form)
+
+        return self._build_info(verb, verb_class, kanji, kana,
+                                self._verb_safe_url(verb))
+
+    def _build_info(self, verb, verb_class, kanji, kana, url):
+        data = {
+            'verb': verb,
+            'verb class': verb_class,
+            'related kanji': kanji,
+            'jisho links': ['http://jisho.org/search/%s' % urlquote(k)
+                            for k in kanji],
+            'forms': kana,
+            'url': url
+        }
+
+        return data
 
 
 japanese = Japanese()
