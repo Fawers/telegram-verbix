@@ -25,8 +25,8 @@ class Verbix:
     # Tenses div class
     SELECT_TENSES = '.pure-u-1-2'
 
-    def __init__(self, language):
-        self.language = language
+    def __init__(self):
+        self.language = self.__class__.__name__
 
     def get_url(self, verb):
         return self.URL.format(language=self.language,

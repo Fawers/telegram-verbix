@@ -7,9 +7,6 @@ class Japanese(Verbix):
     TENSE_FULL_WIDTH = '.pure-u-1-2'
     TENSE_HALF_WIDTH = '.pure-u-1-3'
 
-    def __init__(self):
-        super().__init__('Japanese')
-
     def conjugate(self, verb):
         try:
             soup = self.query_verb(verb)

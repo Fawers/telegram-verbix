@@ -2,9 +2,6 @@ from verbix.base import Verbix, VerbixError, VerbNotFoundError
 
 
 class Swedish(Verbix):
-    def __init__(self):
-        super().__init__('Swedish')
-
     def conjugate(self, verb):
         try:
             soup = self.query_verb(verb)
