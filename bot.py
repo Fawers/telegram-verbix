@@ -5,22 +5,13 @@ import telepot
 
 import misc
 import verbix
+import templates
 
 
 config = configparser.ConfigParser()
 config.read(os.path.join(os.path.dirname(__file__), 'project.ini'))
 
 bot = telepot.Bot(config.get('bot', 'token'))
-
-MESSAGE_TEMPLATE = """\
-Infinitive: [%s](%%s)
-Supine: %s
-Gerund: %s
-Imperative: %s
-
-Present: %s
-Past: %s
-"""
 
 
 def _get_verb_info(verb):
@@ -50,7 +41,8 @@ def _get_verb_info(verb):
 
     url = verb_info['url']
 
-    return MESSAGE_TEMPLATE % (infinitive, supine, gerund, imperative, present, past) % url
+    return templates.swedish.template \
+        % (infinitive, supine, gerund, imperative, present, past) % url
 
 
 @misc.threaded
