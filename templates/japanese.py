@@ -2,9 +2,9 @@ from mako.template import Template
 
 
 TEMPLATE = Template("""\
-Verb: ${data['verb']}
-Class: ${data['verb class']}
-Related Kanji: ${', '.join(data['related kanji'])}
+**Verb:** ${data['verb']}
+**Class:** ${data['verb class']}
+**Related Kanji:** ${', '.join(data['related kanji'])}
 
 % for form in data['forms']:
 **${form['name']}**
