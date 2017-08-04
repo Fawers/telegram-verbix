@@ -1,50 +1,46 @@
-TEMPLATE = """\
-Verb: {verb}
-Class: {verb_class}
-Related Kanji: {comma_separated_kanji}
-
-"""
-
-SIMPLE_FORM_TEMPLATE = """\
-*{form[name]}*
-{form[kana]}
-
-"""
-
-# tricky
-# might want to try mako to render these
-COMPLEX_FORM_TEMPLATE = """\
-*{name}*
-_Affirmative_
-· {form[Affirmative][formality]}: {form[Affirmative][kana]}
-
-_Negative_
-· {form[Negative][formality]}: {form[Negative][kana]}
-"""
-
-def _render_simple_form(form):
-    pass
+from mako.template import Template
 
 
-def _render_complex_form(form):
-    pass
+TEMPLATE = Template("""\
+Verb: ${data['verb']}
+Class: ${data['verb class']}
+Related Kanji: ${', '.join(data['related kanji'])}
+
+% for form in data['forms']:
+**${form['name']}**
+% if 'kana' in form:\
+## simple form; only one kana
+${form['kana']}
+
+% else:
+## complex form; has affirmative/negative and formality levels
+% for situation in ('Affirmative', 'Negative'):
+*${situation}*
+% for formality in form[situation]:
+${formality['formality']}: ${formality['kana']}
+% endfor  ## formality
+
+% endfor  ## situation
+% endif
+% endfor  ## form
+""")
 
 
 def render_response(data):
     """Render the template and insert forms. Return result."""
-    message = TEMPLATE.format(
-        verb=data['verb'], verb_class=data['verb class'],
-        comma_separated_kanji=', '.join(data['related kanji']))
+    message = TEMPLATE.render(data=data).strip()
 
-    for form in data['forms']:
-        if 'kana' in form:
-            message += _render_simple_form(form)
+    verbix_button = verbix_url_button(data['verb'], data['url'])
+    jisho_buttons = jisho_links_buttons(data['related kanji'],
+                                        data['jisho links'])
 
-        else:
-            message += _render_complex_form(form)
+    buttons = {
+        'inline_keyboard':
+            verbix_button['inline_keyboard'] +
+            jisho_buttons['inline_keyboard']
+    }
 
-    return message
-    # TODO: return message + inline buttons
+    return (message, buttons)
 
 
 def verbix_url_button(verb, url):
@@ -65,5 +61,3 @@ def jisho_links_buttons(kanji_list, links):
             for kanji, link in zip(kanji_list, links)
         ]
     }
-    for kanji, link in zip(kanji_list, links):
-        pass
