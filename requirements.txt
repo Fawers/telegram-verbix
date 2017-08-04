@@ -1,3 +1,4 @@
 telepot==10.4
 requests==2.13.0
 bs4==0.0.1
+Mako==1.0.7
