@@ -1,14 +1,20 @@
 from mako.template import Template
 
 
-TEMPLATE = Template("""\
+TEMPLATE = Template("""
 **Verb:** ${data['verb']}
 **Class:** ${data['verb class']}
 **Related Kanji:** ${', '.join(data['related kanji'])}
 
 % for form in data['forms']:
 **${form['name']}**
-% if 'kana' in form:\
+\
+% if form['name'] == 'Provisional':
+## the exception! see verbix.jp.Japanese.conjugate for more info
+*Affirmative:* ${form['Affirmative']}
+*Negative:* ${form['Negative']}
+
+% elif 'kana' in form:
 ## simple form; only one kana
 ${form['kana']}
 
@@ -16,6 +22,7 @@ ${form['kana']}
 ## complex form; has affirmative/negative and formality levels
 % for situation in ('Affirmative', 'Negative'):
 *${situation}*
+\
 % for formality in form[situation]:
 ${formality['formality']}: ${formality['kana']}
 % endfor  ## formality
@@ -40,7 +47,7 @@ def render_response(data):
             jisho_buttons['inline_keyboard']
     }
 
-    return (message, buttons)
+    return (message.strip(), buttons)
 
 
 def verbix_url_button(verb, url):
