@@ -27,7 +27,7 @@ class Swedish(Verbix):
         return self._build_info(
             infinitive=infinitive, supine=supine, gerund=gerund,
             imperative=imperative, present=present, past=past,
-            url=self._verb_safe_url(verb))
+            url=self._verb_safe_url(verb), verb=verb)
 
     def _build_info(self, **data):
         infinitive = data.pop('infinitive')
@@ -37,6 +37,7 @@ class Swedish(Verbix):
         present = data.pop('present')
         past = data.pop('past')
         url = data.pop('url')
+        verb = data.pop('verb')
 
         return {
             'forms': {
@@ -49,7 +50,8 @@ class Swedish(Verbix):
                 'present': (present.text, present.get('class')[0]),
                 'past': (past.text, past.get('class')[0])
             },
-            'url': url
+            'url': url,
+            'verb': verb
         }
 
 
