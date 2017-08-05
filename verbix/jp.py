@@ -39,11 +39,19 @@ class Japanese(Verbix):
             t = tables[i]
             form = {'name': t.select_one('h2').text}
 
-            if self.HALF_COLUMN in t['class']:
+            if form['name'] == 'Provisional':
+                # this is the exception to our rule: it's in a full-width
+                # row, has both affirmative and negative but no level of
+                # politeness. since it's only one, treat it here.
+                affirmative, negative = t.select(self.TENSE_FULL_WIDTH)[2:4]
+
+                form['Affirmative'] = affirmative.select_one('.normal').text
+                form['Negative'] = negative.select_one('.normal').text
+
+            elif self.HALF_COLUMN in t['class']:
                 # there is only kana to retrieve here
                 form['kana'] = t.select(self.TENSE_HALF_WIDTH)[1] \
                                 .select_one('span').text
-                kana.append(form)
 
             else:
                 # there is kana and politeness to retrieve here, both
@@ -65,7 +73,7 @@ class Japanese(Verbix):
                             'formality': formality,
                             'kana': word})
 
-                kana.append(form)
+            kana.append(form)
 
         return self._build_info(verb, verb_class, kanji, kana,
                                 self._verb_safe_url(verb))
