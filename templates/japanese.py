@@ -4,17 +4,17 @@ from templates.base import verbix_url_button
 
 
 TEMPLATE = Template("""
-**Verb:** ${data['verb']}
-**Class:** ${data['verb class']}
-**Related Kanji:** ${', '.join(data['related kanji'])}
+*Verb:* ${data['verb']}
+*Class:* ${data['verb class']}
+*Related Kanji:* ${', '.join(data['related kanji'])}
 
 % for form in data['forms']:
-**${form['name']}**
+*${form['name']}*
 \
 % if form['name'] == 'Provisional':
 ## the exception! see verbix.jp.Japanese.conjugate for more info
-*Affirmative:* ${form['Affirmative']}
-*Negative:* ${form['Negative']}
+_Affirmative:_ ${form['Affirmative']}
+_Negative:_ ${form['Negative']}
 
 % elif 'kana' in form:
 ## simple form; only one kana
@@ -23,7 +23,7 @@ ${form['kana']}
 % else:
 ## complex form; has affirmative/negative and formality levels
 % for situation in ('Affirmative', 'Negative'):
-*${situation}*
+_${situation}_
 \
 % for formality in form[situation]:
 ${formality['formality']}: ${formality['kana']}

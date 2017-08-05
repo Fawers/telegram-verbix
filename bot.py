@@ -25,7 +25,6 @@ COMMAND_PATTERN = re.compile(
 def handle_message(msg):
     message = msg['text']
     chat_id = msg['chat']['id']
-    print(message)
 
     match = COMMAND_PATTERN.match(message)
 
