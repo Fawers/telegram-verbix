@@ -10,15 +10,7 @@ class Japanese(Verbix):
     TENSE_HALF_WIDTH = '.pure-u-1-3'
 
     def conjugate(self, verb):
-        try:
-            soup = self.query_verb(verb)
-        except VerbNotFoundError:
-            return (
-                f'Could not find verb "{verb}" in the database.\n'
-                'Remember to search only with kana or rōmaji (not kanji!).'
-            )
-        except VerbixError:
-            return 'An error occurred while accessing Verbix. Please try again.'
+        soup = self.query_verb(verb)
 
         verbtable = soup.select_one(self.SELECT_VERBTABLE)
 

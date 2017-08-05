@@ -3,12 +3,7 @@ from verbix.base import Verbix, VerbixError, VerbNotFoundError
 
 class Swedish(Verbix):
     def conjugate(self, verb):
-        try:
-            soup = self.query_verb(verb)
-        except VerbNotFoundError:
-            return f'Could not find verb "{verb}" in the database. :('
-        except VerbixError:
-            return 'An error occurred while accessing Verbix. Please try again.'
+        soup = self.query_verb(verb)
 
         verbtable = soup.select_one(self.SELECT_VERBTABLE)
 
