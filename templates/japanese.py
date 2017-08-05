@@ -1,5 +1,7 @@
 from mako.template import Template
 
+from templates.base import verbix_url_button
+
 
 TEMPLATE = Template("""
 **Verb:** ${data['verb']}
@@ -48,13 +50,6 @@ def render_response(data):
     }
 
     return (message.strip(), buttons)
-
-
-def verbix_url_button(verb, url):
-    """Return a Telegram inline button with the Verbix URL."""
-    return {
-        'inline_keyboard': [[{'text': f'Verbix: {verb}', 'url': url}]]
-    }
 
 
 def jisho_links_buttons(kanji_list, links):
