@@ -59,7 +59,7 @@ def handle_message(msg):
             'complete your request. Please try again while I send a report to '
             'my developer.')
         bot.sendMessage(reporter_id, f'Search for {language}:{verb}\n\n'
-                        f'{ve:r}.')
+                        f'{repr(ve)}.')
 
     except Exception as e:
         bot.sendMessage(
@@ -67,7 +67,8 @@ def handle_message(msg):
             'Something strange happened while processing your request. '
             'Please try again while I let my developer know about this.')
         bot.sendMessage(
-            reporter_id, f'Exception raised with message {message}:\n\n{e:r}')
+            reporter_id,
+            f'Exception raised with message {message}:\n\n{repr(e)}')
 
 
 def handle_inline(query):
