@@ -17,3 +17,17 @@ the app shows the available commands; pressing one of them sends the command, wh
 of them will autocomplete the command, followed by a space, where you can just input the verb.
 
 The `/` button looks like this: ![slash button](./slash.png)
+
+## The bot
+The bot is accessible under the username [@verb_conjugator_bot](https://t.me/verb_conjugator_bot).
+
+## Querying
+To query for a verb, you must send `/language verb`. See examples below for each implemented language:
+
+* Swedish: `/swedish läsa`
+* Japanese:
+  * `/japanese yomu`
+  * `/japanese よむ`
+
+**Do** note that I didn't write any *kanji* for Japanese. Since verbs can have more than one
+associated *kanji*, you should always use either *hiragana* or *rōmaji*.

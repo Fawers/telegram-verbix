@@ -18,3 +18,18 @@ comando diretamente, basta escolher e pressioná-lo. Mas se você *segurar* o co
 copiado para a área de input, onde você poderá completar com o verbo desejado.
 
 O botão com a barra se parece com isto: ![slash button](./slash.png)
+
+## O bot
+O bot está acessível sob o nome de usuário [@verb_conjugator_bot](https://t.me/verb_conjugator_bot).
+
+## Recebendo mensagens
+Para receber os verbos, você precisa enviar o comando `/idioma verbo`. Segue abaixo exemplos para
+cada idioma implementado:
+
+* Sueco: `/swedish läsa`
+* Japonês:
+  * `/japanese yomu`
+  * `/japanese よむ`
+
+**Note** que eu não escrevi nenhum *kanji* na busca de verbos japoneses. Alguns verbos têm
+mais do que um *kanji* associado, então você deve buscar usando *hiragana* ou *rōmaji*.
