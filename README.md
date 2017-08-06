@@ -2,6 +2,8 @@
 
 Welcome to the **Telegram Verbix** repository page!
 
+(Procurando pela versão em Português? [Clique aqui](./README-ptbr.md))
+
 | Table of Contents             |
 | ----------------------------- |
 | [About](#about)               |
