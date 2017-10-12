@@ -37,7 +37,7 @@ ${formality['formality']}: ${formality['kana']}
 
 def render_response(data):
     """Render the template and insert forms. Return result."""
-    message = TEMPLATE.render(data=data).strip()
+    message = TEMPLATE.render(data=data).strip().replace('ゝ', 'っ')
 
     verbix_button = verbix_url_button(data['verb'], data['url'])
     jisho_buttons = jisho_links_buttons(data['related kanji'],
