@@ -1,7 +1,10 @@
+import json
 from urllib.parse import quote as urlquote
 
 import bs4
 import requests
+
+import settings
 
 
 # Exceptions
@@ -31,8 +34,8 @@ class Verbix:
         self.language = self.__class__.__name__
 
     def get_url(self, verb):
-        return self.URL.format(language=self.language,
-                               verb=verb.lower())
+        return settings.VERBIX_CONJUGATION_URL.format(
+            VERB=verb, **self.__class__.__dict__)
 
     def query_verb(self, verb):
         """
@@ -49,7 +52,15 @@ class Verbix:
         if response.text.find(self.RED_FLAG_TEXT) != -1:
             raise VerbNotFoundError(verb)
 
-        return bs4.BeautifulSoup(response.content.decode(), 'html.parser')
+        # Treat API output
+        content = response.content.decode()
+        content = content.strip('getVerbixHtml(').rstrip(');')
+        data = json.loads(content)
+
+        if any(data['p2'][key] for key in ('missingVerb', 'invalidVerb', 'unknownVerb')):
+            raise VerbNotFoundError(verb)
+
+        return bs4.BeautifulSoup(data['p1']['html'], 'html.parser')
 
     def conjugate(self, verb):
         # implement this in subclasses
