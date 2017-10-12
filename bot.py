@@ -1,25 +1,22 @@
 import os
 import re
 import configparser
+import traceback as tb
 
 import telepot
 
 import misc
 import verbix
+import settings
 import templates
 
 
-config = configparser.ConfigParser()
-config.read(os.path.join(os.path.dirname(__file__), 'project.ini'))
-
-bot = telepot.Bot(config.get('bot', 'token'))
-reporter_id = config.get('bot', 'reporter_id')
-
-
-AVAILABLE_LANGUAGES = ['swedish', 'japanese']
 COMMAND_PATTERN = re.compile(
-    r'^/(%s)(?: (.*))?' % '|'.join(AVAILABLE_LANGUAGES))
+    r'^/(%s)(?: (.*))?' % '|'.join(settings.AVAILABLE_LANGUAGES))
 
+
+bot = telepot.Bot(settings.TELEGRAM_BOT_TOKEN)
+reporter_id = settings.TELEGRAM_REPORTER_ID
 
 @misc.threaded
 def handle_message(msg):
@@ -52,23 +49,24 @@ def handle_message(msg):
         bot.sendMessage(chat_id, f'Couldn\'t find the verb _{vnf}_. :(',
                         parse_mode='markdown')
 
-    except verbix.VerbixError as ve:
+    except verbix.VerbixError:
         bot.sendMessage(
             chat_id,
             'Something happened while connecting to Verbix, and I could not '
             'complete your request. Please try again while I send a report to '
             'my developer.')
-        bot.sendMessage(reporter_id, f'Search for {language}:{verb}\n\n'
-                        f'{repr(ve)}.')
+        bot.sendMessage(
+            reporter_id,
+            f'Search for {language}:{verb}\n\n{tb.format_exc()}.')
 
-    except Exception as e:
+    except Exception:
         bot.sendMessage(
             chat_id,
             'Something strange happened while processing your request. '
             'Please try again while I let my developer know about this.')
         bot.sendMessage(
             reporter_id,
-            f'Exception raised with message {message}:\n\n{repr(e)}')
+            f'Exception raised with message {message}:\n\n{tb.format_exc()}')
 
 
 def handle_inline(query):
