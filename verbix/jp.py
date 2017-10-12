@@ -9,12 +9,15 @@ class Japanese(Verbix):
     TENSE_FULL_WIDTH = '.pure-u-1-2'
     TENSE_HALF_WIDTH = '.pure-u-1-3'
 
+    LANGUAGE_CODE = 51
+    TEMPLATE_CODE = 151
+
     def conjugate(self, verb):
         soup = self.query_verb(verb)
 
         verbtable = soup.select_one(self.SELECT_VERBTABLE)
 
-        tables = verbtable.select(self.SELECT_FORMS)
+        tables = soup.select(self.SELECT_FORMS)
 
         # Table 0 refers to the verb class;
         # Table 1 has the related kanji (glossary lookup);
@@ -78,7 +81,7 @@ class Japanese(Verbix):
             'jisho links': ['http://jisho.org/search/%s' % urlquote(k)
                             for k in kanji],
             'forms': kana,
-            'url': url
+            'url': 'http://www.verbix.com/find-verb/'  # TODO fix this $#!t
         }
 
         return data
