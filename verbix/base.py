@@ -73,4 +73,5 @@ class Verbix:
         raise NotImplementedError
 
     def _verb_safe_url(self, verb):
-        return urlquote(self.get_url(verb), safe=':/')
+        return urlquote(
+    f'http://www.verbix.com/find-verb/{verb.lower()}.html', safe=':/')

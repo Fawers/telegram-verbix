@@ -46,7 +46,7 @@ class Swedish(Verbix):
                 'present': (present.text, present.get('class')[0]),
                 'past': (past.text, past.get('class')[0])
             },
-            'url': 'http://www.verbix.com/find-verb/',  # TODO fix this $#!t,
+            'url': self._verb_safe_url(verb),
             'verb': verb
         }
 

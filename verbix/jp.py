@@ -81,7 +81,7 @@ class Japanese(Verbix):
             'jisho links': ['http://jisho.org/search/%s' % urlquote(k)
                             for k in kanji],
             'forms': kana,
-            'url': 'http://www.verbix.com/find-verb/'  # TODO fix this $#!t
+            'url': self._verb_safe_url(verb)
         }
 
         return data
