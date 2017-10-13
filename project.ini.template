@@ -1,0 +1,7 @@
+[telegram]
+token = your telegram bot token
+reporter_id = your telegram user id
+
+[verbix]
+api_key = your verbix api key
+conjugation_url = https://api.verbix.com//conjugator/jsonp/%(api_key)s/1/{LANGUAGE_CODE}/{TEMPLATE_CODE}/{VERB}
