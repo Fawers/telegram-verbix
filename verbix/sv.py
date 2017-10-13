@@ -2,18 +2,19 @@ from verbix.base import Verbix, VerbixError, VerbNotFoundError
 
 
 class Swedish(Verbix):
+    LANGUAGE_CODE = 21
+    TEMPLATE_CODE = 121
+
     def conjugate(self, verb):
         soup = self.query_verb(verb)
 
-        verbtable = soup.select_one(self.SELECT_VERBTABLE)
-
-        forms = verbtable.select(self.SELECT_FORMS)
+        forms = soup.select(self.SELECT_FORMS)
 
         infinitive, supine, gerund = forms[0].select('span')
 
-        imperative = forms[-1].select('span')[1]
+        imperative = forms[4].select('span')[1]
 
-        tenses = verbtable.select(self.SELECT_TENSES)
+        tenses = soup.select(self.SELECT_TENSES)
 
         present, past = tenses[0], tenses[2]
         present = present.select('span')[1]
@@ -45,7 +46,7 @@ class Swedish(Verbix):
                 'present': (present.text, present.get('class')[0]),
                 'past': (past.text, past.get('class')[0])
             },
-            'url': url,
+            'url': 'http://www.verbix.com/find-verb/',  # TODO fix this $#!t,
             'verb': verb
         }
 
